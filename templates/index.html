@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ML Projects</title>
+</head>
+
+<body class="bg">
+    <form class="container" action="{{url_for('predict')}}" method="post">
+        
+            <legend>HOUSE PRICE PREDICTION</legend>
+            <div class="input">
+                <label class="label">Age</label>
+                <input type="text" name='Age' required="required">
+            </div>
+
+            <div class="input">
+                <label class="label">Gender</label>
+                <input type="text" name='Gender' required="required">
+            </div>
+
+            <div class="input">
+                <label class="label">Location</label>
+                <input type="text" name='Location' required="required">
+            </div>
+
+            <div class="input">
+                <label class="label">Subscription_Length_Months</label>
+                <input type="text" name='Subscription_Length_Months' required="required">
+            </div>
+
+            <div class="input">
+                <label class="label">Monthly_Bill</label>
+                <input type="text" name='Monthly_Bill' required="required">
+            </div>
+
+            <div class="input">
+                <label class="label">Total_Usage_GB</label>
+                <input type="text" name='Total_Usage_GB' required="required">
+            </div>
+
+            
+        <br>
+        <button type="submit">Predict</button>
+        
+    </form>
+    <p id="output">{{prediction}}</p>
+
+
+</body>
+
+</html>
