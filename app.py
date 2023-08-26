@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 app = Flask(__name__)
-
+app.debug = True
 # load the model
 model = joblib.load(open('model/model.joblib', 'rb'))
 pipeline = joblib.load(open('model/pipeline.joblib', 'rb'))
@@ -15,22 +15,26 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = [x for x in request.form.values()]
-    final_input = pipeline.transform(np.array(data).reshape(1,-1))
-    print(final_input)
-    output = model.predict(final_input)[0]
-    return render_template("index.html", prediction=f"The House Price Prediction is {output}")
+    result = ''
+    age = float(request.form['Age'])
+    gender = request.form['Gender']
+    location = request.form['Location']
+    subscription_Length_Months = float(request.form['Subscription_Length_Months'])
+    monthly_Bill = float(request.form['Monthly_Bill'])
+    total_Usage_GB = float(request.form['Total_Usage_GB'])
 
-@app.route('/predict_api', methods=['POST'])
-def predict_api():
-    data = request.json['data']
+    data = [[age, gender, location, subscription_Length_Months, monthly_Bill, total_Usage_GB]]
     print(data)
-    dataArr = np.array(list(data.values())).reshape(1, -1)
-    print(dataArr)
-    new_data = pipeline.transform(dataArr)
-    output = model.predict(new_data)
-    print(output[0])
-    return jsonify(output[0])
+    user_input = pd.DataFrame(data , columns=['Age', 'Gender', 'Location', 'Subscription_Length_Months', 'Monthly_Bill', 'Total_Usage_GB'])
+    # print(user_input)
+    final_input = pipeline.transform(user_input)
+    # print(final_input)
+    output = model.predict(final_input)[0]
+    if output == 0:
+        result = 'not churn'
+    else:
+        result = 'churn'
+    return render_template("index.html", prediction=f"The Customer will {result}")
  
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
